@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.py[cod]
+primasis.db
+primasis.db-shm
+primasis.db-wal
+instance/

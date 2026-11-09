@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Kolompok C UT" database="LogicalDesign" id="16c07ee1-39d0-48c2-8faf-0170fc8ca0a2" >
+	<schema name="Kolompok C UT" >
+		<table name="mitras : smkmuh4 &amp; smanmojo" prior="mitras" spec="" >
+			<column name="mitra_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="mitra_code" type="VARCHAR" length="50" mandatory="y" />
+			<column name="mitra_name" type="VARCHAR" length="100" mandatory="y" />
+			<column name="address" type="VARCHAR" length="255" />
+			<column name="phone" type="VARCHAR" length="30" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_mitras" unique="PRIMARY_KEY" >
+				<column name="mitra_id" />
+			</index>
+			<index name="unq_mitras_mitra_code" unique="UNIQUE_KEY" >
+				<column name="mitra_code" />
+			</index>
+		</table>
+		<table name="products" spec="" >
+			<column name="product_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="supplier_id" type="INT" mandatory="y" />
+			<column name="product_code" type="VARCHAR" length="50" mandatory="y" />
+			<column name="product_name" type="VARCHAR" length="150" mandatory="y" />
+			<column name="category" type="VARCHAR" length="100" />
+			<column name="unit" type="VARCHAR" length="30" />
+			<column name="description" type="VARCHAR" length="255" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="DATETIME" >
+				<column_options><![CDATA[ON UPDATE  CURRENT_TIMESTAMP]]></column_options>
+			</column>
+			<index name="pk_products" unique="PRIMARY_KEY" >
+				<column name="product_id" />
+			</index>
+			<index name="uq_supplier_product_code" unique="UNIQUE_KEY" >
+				<column name="supplier_id" />
+				<column name="product_code" />
+			</index>
+			<fk name="fk_products_supplier" to_schema="Kolompok C UT" to_table="suplier : Kedai Primadona" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="supplier_id" pk="supplier_id" />
+			</fk>
+		</table>
+		<table name="returns" spec="" >
+			<column name="return_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="return_date" type="DATE" mandatory="y" />
+			<column name="mitra_id" type="INT" mandatory="y" />
+			<column name="supplier_id" type="INT" mandatory="y" />
+			<column name="product_id" type="INT" mandatory="y" />
+			<column name="quantity" type="INT" mandatory="y" />
+			<column name="note" type="VARCHAR" length="255" />
+			<column name="created_by" type="INT" mandatory="y" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_returns" unique="PRIMARY_KEY" >
+				<column name="return_id" />
+			</index>
+			<fk name="fk_ret_mitra" to_schema="Kolompok C UT" to_table="mitras : smkmuh4 &amp; smanmojo" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="mitra_id" pk="mitra_id" />
+			</fk>
+			<fk name="fk_ret_supplier" to_schema="Kolompok C UT" to_table="suplier : Kedai Primadona" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="supplier_id" pk="supplier_id" />
+			</fk>
+			<fk name="fk_ret_product" to_schema="Kolompok C UT" to_table="products" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="product_id" pk="product_id" />
+			</fk>
+			<fk name="fk_ret_user" to_schema="Kolompok C UT" to_table="users" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="created_by" pk="user_id" />
+			</fk>
+		</table>
+		<table name="sale_items" spec="" >
+			<column name="sale_item_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="sale_id" type="INT" mandatory="y" />
+			<column name="product_id" type="INT" mandatory="y" />
+			<column name="quantity" type="INT" mandatory="y" />
+			<column name="unit_price" type="DECIMAL" length="12" decimal="2" mandatory="y" />
+			<column name="subtotal" type="DECIMAL" length="14" decimal="2" mandatory="y" />
+			<index name="pk_sale_items" unique="PRIMARY_KEY" >
+				<column name="sale_item_id" />
+			</index>
+			<fk name="fk_si_sale" to_schema="Kolompok C UT" to_table="sales" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="sale_id" pk="sale_id" />
+			</fk>
+			<fk name="fk_si_product" to_schema="Kolompok C UT" to_table="products" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="product_id" pk="product_id" />
+			</fk>
+		</table>
+		<table name="sales" spec="" >
+			<column name="sale_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="sale_date" type="DATETIME" mandatory="y" />
+			<column name="mitra_id" type="INT" mandatory="y" />
+			<column name="supplier_id" type="INT" mandatory="y" />
+			<column name="total_amount" type="DECIMAL" length="14" decimal="2" mandatory="y" />
+			<column name="created_by" type="INT" mandatory="y" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_sales" unique="PRIMARY_KEY" >
+				<column name="sale_id" />
+			</index>
+			<fk name="fk_sales_mitra" to_schema="Kolompok C UT" to_table="mitras : smkmuh4 &amp; smanmojo" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="mitra_id" pk="mitra_id" />
+			</fk>
+			<fk name="fk_sales_supplier" to_schema="Kolompok C UT" to_table="suplier : Kedai Primadona" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="supplier_id" pk="supplier_id" />
+			</fk>
+			<fk name="fk_sales_user" to_schema="Kolompok C UT" to_table="users" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="created_by" pk="user_id" />
+			</fk>
+		</table>
+		<table name="stock_transactions" spec="" >
+			<column name="stock_trx_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="trx_date" type="DATE" mandatory="y" />
+			<column name="mitra_id" type="INT" mandatory="y" />
+			<column name="product_id" type="INT" mandatory="y" />
+			<column name="trx_type" type="ENUM" mandatory="y" >
+				<enumeration><![CDATA['IN', 'SALE', 'RETURN']]></enumeration>
+			</column>
+			<column name="quantity" type="INT" mandatory="y" />
+			<column name="description" type="VARCHAR" length="255" />
+			<column name="created_by" type="INT" mandatory="y" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_stock_transactions" unique="PRIMARY_KEY" >
+				<column name="stock_trx_id" />
+			</index>
+			<fk name="fk_st_mitra" to_schema="Kolompok C UT" to_table="mitras : smkmuh4 &amp; smanmojo" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="mitra_id" pk="mitra_id" />
+			</fk>
+			<fk name="fk_st_product" to_schema="Kolompok C UT" to_table="products" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="product_id" pk="product_id" />
+			</fk>
+			<fk name="fk_st_user" to_schema="Kolompok C UT" to_table="users" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="created_by" pk="user_id" />
+			</fk>
+		</table>
+		<table name="suplier : Kedai Primadona" prior="suppliers" spec="" >
+			<column name="supplier_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="supplier_name" type="VARCHAR" length="100" mandatory="y" />
+			<column name="address" type="VARCHAR" length="255" />
+			<column name="phone" type="VARCHAR" length="30" />
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_suppliers" unique="PRIMARY_KEY" >
+				<column name="supplier_id" />
+			</index>
+		</table>
+		<table name="supplier_mitra_products" spec="" >
+			<column name="smp_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="supplier_id" type="INT" mandatory="y" />
+			<column name="mitra_id" type="INT" mandatory="y" />
+			<column name="product_id" type="INT" mandatory="y" />
+			<column name="cost_price" type="DECIMAL" length="12" decimal="2" mandatory="y" />
+			<column name="price_to_mitra" type="DECIMAL" length="12" decimal="2" mandatory="y" />
+			<column name="price_from_mitra" type="DECIMAL" length="12" decimal="2" mandatory="y" />
+			<column name="is_active" type="TEXT" length="1" mandatory="y" >
+				<defo><![CDATA[1]]></defo>
+			</column>
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="DATETIME" >
+				<column_options><![CDATA[ON UPDATE  CURRENT_TIMESTAMP]]></column_options>
+			</column>
+			<index name="pk_supplier_mitra_products" unique="PRIMARY_KEY" >
+				<column name="smp_id" />
+			</index>
+			<index name="uq_smp" unique="UNIQUE_KEY" >
+				<column name="supplier_id" />
+				<column name="mitra_id" />
+				<column name="product_id" />
+			</index>
+			<fk name="fk_smp_supplier" to_schema="Kolompok C UT" to_table="suplier : Kedai Primadona" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="supplier_id" pk="supplier_id" />
+			</fk>
+			<fk name="fk_smp_mitra" to_schema="Kolompok C UT" to_table="mitras : smkmuh4 &amp; smanmojo" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="mitra_id" pk="mitra_id" />
+			</fk>
+			<fk name="fk_smp_product" to_schema="Kolompok C UT" to_table="products" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="product_id" pk="product_id" />
+			</fk>
+		</table>
+		<table name="users" spec="" >
+			<column name="user_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="username" type="VARCHAR" length="50" mandatory="y" />
+			<column name="password_hash" type="VARCHAR" length="255" mandatory="y" />
+			<column name="full_name" type="VARCHAR" length="100" mandatory="y" />
+			<column name="role" type="ENUM" mandatory="y" >
+				<enumeration><![CDATA['SUPPLIER', 'MITRA', 'ADMIN']]></enumeration>
+			</column>
+			<column name="supplier_id" type="INT" />
+			<column name="mitra_id" type="INT" />
+			<column name="is_active" type="TEXT" length="1" mandatory="y" >
+				<defo><![CDATA[1]]></defo>
+			</column>
+			<column name="created_at" type="DATETIME" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="DATETIME" >
+				<column_options><![CDATA[ON UPDATE  CURRENT_TIMESTAMP]]></column_options>
+			</column>
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+			<index name="unq_users_username" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<fk name="fk_users_supplier" to_schema="Kolompok C UT" to_table="suplier : Kedai Primadona" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="supplier_id" pk="supplier_id" />
+			</fk>
+			<fk name="fk_users_mitra" to_schema="Kolompok C UT" to_table="mitras : smkmuh4 &amp; smanmojo" type="Identifying" mandatory="n" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="mitra_id" pk="mitra_id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="public" />
+	<diagram_group name="Default" id="875a924c-d01c-44a8-96f5-37dfdc5b1cb8" >
+		<diagram name="Default Diagram" id="ef760e1a-a5f7-41c2-a50b-ba9d35a2bae3" show_relation="columns" >
+			<entity schema="Kolompok C UT" name="mitras : smkmuh4 &amp; smanmojo" color="3986C1" x="342" y="57" />
+			<entity schema="Kolompok C UT" name="products" color="3986C1" x="1235" y="380" />
+			<entity schema="Kolompok C UT" name="returns" color="3986C1" x="57" y="323" />
+			<entity schema="Kolompok C UT" name="sale_items" color="3986C1" x="342" y="380" />
+			<entity schema="Kolompok C UT" name="sales" color="3986C1" x="931" y="380" />
+			<entity schema="Kolompok C UT" name="stock_transactions" color="3986C1" x="627" y="380" />
+			<entity schema="Kolompok C UT" name="suplier : Kedai Primadona" color="3986C1" x="627" y="57" />
+			<entity schema="Kolompok C UT" name="supplier_mitra_products" color="3986C1" x="285" y="703" />
+			<entity schema="Kolompok C UT" name="users" color="3986C1" x="1539" y="380" />
+			<script name="AI" id="42871208-90ad-4c12-82dc-aa24832e5d4e" language="SQL" confirmed="y" >
+				<string><![CDATA[SELECT
+st.trx_date,
+m.mitra_name,
+p.product_name,
+SUM(CASE WHEN st.trx_type = 'IN'     THEN st.quantity ELSE 0 END) AS qty_titip,
+SUM(CASE WHEN st.trx_type = 'SALE'   THEN st.quantity ELSE 0 END) AS qty_terjual,
+SUM(CASE WHEN st.trx_type = 'RETURN' THEN st.quantity ELSE 0 END) AS qty_kembali
+FROM stock_transactions st
+JOIN products p ON p.product_id = st.product_id
+JOIN mitras m   ON m.mitra_id = st.mitra_id
+WHERE p.supplier_id = 1  -- misal Kedai Primadona
+AND st.trx_date = '2026-10-19'
+GROUP BY st.trx_date, m.mitra_name, p.product_name;]]></string>
+			</script>
+		</diagram>
+	</diagram_group>
+</project>
